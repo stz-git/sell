@@ -4,7 +4,7 @@ import com.imooc.sell.dataobject.ProductCategory;
 
 import java.util.List;
 
-public interface ProductCategoryService {
+public interface CategoryService {
 
     ProductCategory findOne(Integer categoryId);
 

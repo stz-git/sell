@@ -2,14 +2,14 @@ package com.imooc.sell.service.impl;
 
 import com.imooc.sell.dataobject.ProductCategory;
 import com.imooc.sell.repository.ProductCategoryRepository;
-import com.imooc.sell.service.ProductCategoryService;
+import com.imooc.sell.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ProductCategoryServiceImpl implements ProductCategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private ProductCategoryRepository repository;
