@@ -1,7 +1,10 @@
 package com.imooc.sell.service.impl;
 
 import com.imooc.sell.dataobject.ProductInfo;
+import com.imooc.sell.dto.CarDTO;
 import com.imooc.sell.enums.ProductStatusEnum;
+import com.imooc.sell.enums.ResultEnum;
+import com.imooc.sell.exception.SellException;
 import com.imooc.sell.repository.ProductInfoRepository;
 import com.imooc.sell.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,5 +40,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductInfo save(ProductInfo productInfo) {
         return repository.save(productInfo);
+    }
+
+    @Override
+    public void increaseStock(List<CarDTO> carDTOList) {
+
+    }
+
+    @Override
+    @Transactional
+    public void decreaseStock(List<CarDTO> carDTOList) {
+        for (CarDTO carDTO : carDTOList) {
+            ProductInfo productInfo = findOne(carDTO.getProductId());
+            Integer stock = productInfo.getProductStock() - carDTO.getProductQuantity();
+            if(stock < 0)
+                throw new SellException(ResultEnum.PRODUCT_STOCK_ERROR);
+            productInfo.setProductStock(stock);
+            save(productInfo);
+        }
     }
 }
