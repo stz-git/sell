@@ -6,18 +6,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Data
 public class OrderForm {
 
-    @NotEmpty(message = "姓名必填")
+    @NotEmpty(message = "name require")
     private String name;
 
-    @NotEmpty(message = "手机号必填")
+    @NotEmpty(message = "phone require")
     private String phone;
 
-    @NotEmpty(message = "地址必填")
+    @NotEmpty(message = "address require")
     private String address;
 
-    @NotEmpty(message = "openid必填")
+    @NotEmpty(message = "openid require")
     private String openid;
 
-    @NotEmpty(message = "购物车不能为空")
+    @NotEmpty(message = "car empty")
     private String items;
 }

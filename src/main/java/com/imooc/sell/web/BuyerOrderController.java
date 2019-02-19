@@ -31,6 +31,7 @@ public class BuyerOrderController {
     @Autowired
     private OrderService orderService;
 
+    //check openid safety
     @Autowired
     private BuyerService buyerService;
 
