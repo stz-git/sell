@@ -35,7 +35,7 @@ public class BuyerOrderController {
     @Autowired
     private BuyerService buyerService;
 
-    //创建订单
+    //create order
     @PostMapping("/create")
     public ResultVO<Map<String, String>> create(@Valid OrderForm orderForm, BindingResult bindingResult) {
 
@@ -53,7 +53,7 @@ public class BuyerOrderController {
         return ResultUtil.success(resultMap);
     }
 
-    //订单列表
+    //order lists
     @GetMapping("/list")
     public ResultVO<List<OrderDTO>> list(@RequestParam("openid") String openid,
                                          @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -66,14 +66,14 @@ public class BuyerOrderController {
         return ResultUtil.success(orderDTOPage.getContent());
     }
 
-    //订单详情
+    //order detail
     @GetMapping("/detail")
     public ResultVO<OrderDTO> detail(@RequestParam("openid") String openid, @RequestParam("orderId") String orderId) {
         OrderDTO orderDTO = buyerService.findOrderOne(openid, orderId);
         return ResultUtil.success(orderDTO);
     }
 
-    //取消订单
+    //cancel order
     @PostMapping("/cancel")
     public ResultVO cancel(@RequestParam("openid") String openid,
                            @RequestParam("orderId") String orderId) {
