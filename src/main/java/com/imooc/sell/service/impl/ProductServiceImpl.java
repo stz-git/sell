@@ -44,14 +44,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void increaseStock(List<CarDTO> carDTOList) {
-
+        for (CarDTO carDTO : carDTOList) {
+            ProductInfo productInfo = findOne(carDTO.getProductId());
+            if(productInfo == null)
+                throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+            productInfo.setProductStock(carDTO.getProductQuantity() + productInfo.getProductStock());
+            save(productInfo);
+        }
     }
 
+    //扣库存在多线程并发的情况下可能会带来超卖的问题
     @Override
     @Transactional
     public void decreaseStock(List<CarDTO> carDTOList) {
         for (CarDTO carDTO : carDTOList) {
             ProductInfo productInfo = findOne(carDTO.getProductId());
+            if(productInfo == null)
+                throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
             Integer stock = productInfo.getProductStock() - carDTO.getProductQuantity();
             if(stock < 0)
                 throw new SellException(ResultEnum.PRODUCT_STOCK_ERROR);

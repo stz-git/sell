@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -39,14 +41,21 @@ public class OrderServiceImplTest {
 
     @Test
     public void findList() {
+        PageRequest pageRequest = new PageRequest(0, 2);
+        Page<OrderDTO> page = orderService.findList("abc123", pageRequest);
+        System.out.println(page.getContent());
     }
 
     @Test
     public void findOne() {
+        OrderDTO orderDTO = orderService.findOne("1");
+        System.out.println(orderDTO);
     }
 
     @Test
     public void cancel() {
+        OrderDTO orderDTO = orderService.findOne("1550549897277318619");
+        orderService.cancel(orderDTO);
     }
 
     @Test
