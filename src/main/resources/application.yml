@@ -15,3 +15,7 @@ server:
 wechat:
   mpAppId: wxf14bf9b7d6a0f4d0
   mpAppSecret: c9fa4d34f8d7a54f7575e5926ae590d1
+  mchId:
+  mchKey:
+  keyPath:
+  notifyUrl: http://cookie.natapp1.cc/sell/pay/notify

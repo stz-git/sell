@@ -1,6 +1,5 @@
 package com.imooc.sell.web;
 
-import com.imooc.sell.exception.SellException;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -44,9 +43,4 @@ public class WechatController {
         return "redirect:" + returnUrl + "?openid=" + openId;
     }
 
-    @GetMapping("/index")
-    @ResponseBody
-    public String index(@RequestParam("openid")String openid){
-        return "success: openid="+openid;
-    }
 }
