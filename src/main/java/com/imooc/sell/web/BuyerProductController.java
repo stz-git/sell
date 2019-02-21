@@ -32,15 +32,15 @@ public class BuyerProductController {
     @GetMapping("/list")
     public ResultVO list(){
 
-        //1.查询所有上架商品
+        //1.get up product
         List<ProductInfo> productInfoList = productService.findUpAll();
 
-        //2.查询要展示的类目
+        //2.get category
         List<Integer> categoryTypeList = productInfoList.stream()
                 .map(e -> e.getCategoryType()).collect(Collectors.toList());
         List<ProductCategory> categories = categoryService.findByCategoryTypeIn(categoryTypeList);
 
-        //3.拼装数据
+        //3.joint result
         List<ProductVO> productVOList = new ArrayList<>();
 
         for (ProductCategory category : categories) {
@@ -49,8 +49,6 @@ public class BuyerProductController {
 
             List<ProductInfoVO> productInfoVOList = new ArrayList<ProductInfoVO>();
 
-            //类目中遍历产品对比类目编号的效率实在太低，时间复杂度立马变成O(n^2)
-            //但是又不能在这里用类目编号查当前类目下上架的商品，因为尽量不要再for中查询数据库
             for (ProductInfo productInfo : productInfoList) {
                 if(productInfo.getCategoryType().equals(category.getCategoryType())){
                     ProductInfoVO productInfoVO = new ProductInfoVO();

@@ -11,6 +11,7 @@
                 },
                 function(res){
                     // if(res.err_msg == "get_brand_wcpay_request:ok" ) {}
+                    //Don't judge pay'success by this
                     location.href = "${returnUrl}";
                 }
         );

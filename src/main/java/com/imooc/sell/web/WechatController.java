@@ -5,9 +5,11 @@ import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URLEncoder;
 
 @Controller
@@ -18,11 +20,13 @@ public class WechatController {
     @Autowired
     private WxMpService wxMpService;
 
+    @Value("${wechat.getOpenid.redirectUrl}")
+    private String redirect_url;
+
     //get code
     @GetMapping("/authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl) {
 
-        String redirect_url = "http://cookie.natapp1.cc/sell/wechat/userInfo";
         //joint request code's url
         String result = wxMpService.oauth2buildAuthorizationUrl(redirect_url, WxConsts.OAUTH2_SCOPE_BASE, URLEncoder.encode(returnUrl));
         return "redirect:" + result;

@@ -9,8 +9,14 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "wechat")
 public class WechatAccountConfig {
 
+    //wechat_pay
     private String mpAppId;
+
+    //wechat_openid
+    private String myAppId;
     private String mpAppSecret;
+
+
 
     private String mchId;
     private String mchKey;
