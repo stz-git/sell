@@ -13,9 +13,10 @@ server:
   context-path: /sell
 
 wechat:
-  mpAppId: wxf14bf9b7d6a0f4d0
+  mpAppId: wxd898fcb01713c658
+#  mpAppId: wxf14bf9b7d6a0f4d0
   mpAppSecret: c9fa4d34f8d7a54f7575e5926ae590d1
-  mchId:
-  mchKey:
-  keyPath:
+  mchId: 1483469312
+  mchKey: C5245D70627C1F8E9964D494B0735025
+  keyPath: E:\h5.p12
   notifyUrl: http://cookie.natapp1.cc/sell/pay/notify

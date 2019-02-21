@@ -43,4 +43,9 @@ public class WechatController {
         return "redirect:" + returnUrl + "?openid=" + openId;
     }
 
+
+    @GetMapping("/index")
+    public void index(String openid){
+        System.out.println(openid);
+    }
 }

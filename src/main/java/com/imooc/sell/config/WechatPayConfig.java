@@ -16,7 +16,7 @@ public class WechatPayConfig {
     public BestPayServiceImpl bestPayService() {
         WxPayH5Config wxPayH5Config = new WxPayH5Config();
         wxPayH5Config.setAppId(wechatAccountConfig.getMpAppId());
-        wxPayH5Config.setAppSecret(wechatAccountConfig.getMpAppSecret());
+//        wxPayH5Config.setAppSecret(wechatAccountConfig.getMpAppSecret());
         wxPayH5Config.setMchId(wechatAccountConfig.getMchId());
         wxPayH5Config.setMchKey(wechatAccountConfig.getMchKey());
         wxPayH5Config.setKeyPath(wechatAccountConfig.getKeyPath());
