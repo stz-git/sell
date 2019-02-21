@@ -13,6 +13,7 @@ import com.imooc.sell.exception.SellException;
 import com.imooc.sell.repository.OrderDetailRepository;
 import com.imooc.sell.repository.OrderMasterRepository;
 import com.imooc.sell.service.OrderService;
+import com.imooc.sell.service.PayService;
 import com.imooc.sell.service.ProductService;
 import com.imooc.sell.util.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private PayService payService;
 
     @Override
     @Transactional
@@ -104,17 +108,16 @@ public class OrderServiceImpl implements OrderService {
         return orderDTO;
     }
 
-    //这orderDTO中真是什么都传(orderMaster + List<orderDetail>)
     @Override
     @Transactional
     public OrderDTO cancel(OrderDTO orderDTO) {
 
-        //1.判断订单状态
+        //1.judge order's status
         if (!orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
             throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
         }
 
-        //2.修改订单状态
+        //2.update order's status(transaction rollback)
         OrderMaster orderMaster = new OrderMaster();
         orderDTO.setOrderStatus(OrderStatusEnum.CANCEL.getCode());
         BeanUtils.copyProperties(orderDTO, orderMaster);
@@ -123,7 +126,7 @@ public class OrderServiceImpl implements OrderService {
             throw new SellException(ResultEnum.ORDER_UPDATE_FAIL);
         }
 
-        //3.回库存
+        //3.stock +1
         if(CollectionUtils.isEmpty(orderDTO.getOrderDetailList())){
             throw new SellException(ResultEnum.ORDER_DETAIL_EMPTY);
         }
@@ -133,9 +136,9 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
         productService.increaseStock(carDTOList);
 
-        //4.如果已支付，需要退款
+        //4.refund
         if(orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS)){
-            //TODO
+            payService.refoud(orderDTO);
         }
 
         return orderDTO;
@@ -144,12 +147,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDTO finish(OrderDTO orderDTO) {
-        //1.判断订单状态
+
         if (!orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
             throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
         }
 
-        //2.修改订单状态
         OrderMaster orderMaster = new OrderMaster();
         orderDTO.setOrderStatus(OrderStatusEnum.FINISHED.getCode());
         BeanUtils.copyProperties(orderDTO, orderMaster);
@@ -164,17 +166,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDTO paid(OrderDTO orderDTO) {
-        //1.判断订单状态
+        //1.judge order's status
         if (!orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
             throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
         }
 
-        //2.判断支付状态
-        if(!orderDTO.getPayStatus().equals(PayStatusEnum.WAIT)){
+        //2.judge order's pay status
+        if(!orderDTO.getPayStatus().equals(PayStatusEnum.WAIT.getCode())){
             throw new SellException(ResultEnum.ORDER_PAY_STATUS_ERROR);
         }
 
-        //3.修改支付状态
+        //3.update order's pay status
         OrderMaster orderMaster = new OrderMaster();
         orderDTO.setPayStatus(PayStatusEnum.SUCCESS.getCode());
         BeanUtils.copyProperties(orderDTO, orderMaster);
