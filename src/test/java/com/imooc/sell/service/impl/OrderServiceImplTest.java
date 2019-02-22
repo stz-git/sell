@@ -67,4 +67,11 @@ public class OrderServiceImplTest {
         OrderDTO orderDTO = orderService.findOne("1550562471973203311");
         orderService.paid(orderDTO);
     }
+
+    @Test
+    public void findAll(){
+        PageRequest pageRequest = new PageRequest(0, 5);
+        Page<OrderDTO> page = orderService.findList(pageRequest);
+        System.out.println(page.getContent());
+    }
 }
