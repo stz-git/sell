@@ -33,12 +33,41 @@
                             <td>${orderDTO.orderStatusEnum.msg}</td>
                             <td>${orderDTO.payStatusEnum.msg}</td>
                             <td>${orderDTO.createTime}</td>
-                            <td>详情</td>
-                            <td>取消</td>
+                            <td><a href="/sell/seller/order/detail?orderId=${orderDTO.orderId}">详情</a></td>
+                            <td>
+                                <#if orderDTO.orderStatus == 0>
+                                    <a href="/sell/seller/order/cancel?orderId=${orderDTO.orderId}">取消</a>
+                                </#if>
+                            </td>
                         </tr>
                         </#list>
                 </tbody>
             </table>
+        </div>
+    <#--limit-->
+        <div class="col-md-12 column">
+            <ul class="pagination pull-right">
+                <#if currentPage lte 1>
+                    <li class="disabled"><a href="#">Prev</a></li>
+                <#else>
+                    <li><a href="/sell/seller/order/list?page=${currentPage-1}&size=${size}">Prev</a></li>
+                </#if>
+
+                <#list 1..orderDTOPage.getTotalPages() as index>
+                    <#if currentPage = index>
+                        <li class="disabled"><a href="#">${index}</a></li>
+                    <#else>
+                        <li><a href="/sell/seller/order/list?page=${index}&size=${size}">${index}</a></li>
+                    </#if>
+                </#list>
+
+                <#if currentPage gte orderDTOPage.getTotalPages()>
+                    <li class="disabled"><a href="#">Next</a></li>
+                <#else>
+                    <li><a href="/sell/seller/order/list?page=${currentPage+1}&size=${size}">Next</a></li>
+                </#if>
+
+            </ul>
         </div>
     </div>
 </div>

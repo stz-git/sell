@@ -98,6 +98,7 @@ public class OrderServiceImpl implements OrderService {
         OrderMaster orderMaster = orderMasterRepository.findOne(orderId);
         if (orderMaster == null)
             throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+
         List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderMaster.getOrderId());
         if (CollectionUtils.isEmpty(orderDetailList))
             throw new SellException(ResultEnum.ORDERDETAIL_NOT_EXIST);
@@ -137,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
         productService.increaseStock(carDTOList);
 
         //4.refund
-        if(orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS)){
+        if(orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())){
             payService.refoud(orderDTO);
         }
 

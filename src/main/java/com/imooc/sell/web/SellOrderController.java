@@ -1,7 +1,10 @@
 package com.imooc.sell.web;
 
 import com.imooc.sell.dto.OrderDTO;
+import com.imooc.sell.enums.ResultEnum;
+import com.imooc.sell.exception.SellException;
 import com.imooc.sell.service.OrderService;
+import com.lly835.bestpay.rest.type.Get;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,13 +24,63 @@ public class SellOrderController {
     private OrderService orderService;
 
     @GetMapping("/list")
-    public ModelAndView list(@RequestParam(value = "page", defaultValue = "1")Integer page,
-                             @RequestParam(value = "size", defaultValue = "10")Integer size,
-                             Map<String,Object> map){
+    public ModelAndView list(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                             @RequestParam(value = "size", defaultValue = "10") Integer size,
+                             Map<String, Object> map) {
         PageRequest pageRequest = new PageRequest(page - 1, size);
         Page<OrderDTO> list = orderService.findList(pageRequest);
 
         map.put("orderDTOPage", list);
+        map.put("currentPage", page);
+        map.put("size", size);
         return new ModelAndView("order/list", map);
+    }
+
+    @GetMapping("/cancel")
+    public ModelAndView cancel(@RequestParam("orderId") String orderId,
+                               Map<String, Object> map) {
+        try{
+            OrderDTO orderDTO = orderService.findOne(orderId);
+            orderService.cancel(orderDTO);
+        }catch (SellException e){
+            map.put("msg", e.getMessage());
+            map.put("url", "/sell/seller/order/list");
+            return new ModelAndView("common/error", map);
+        }
+        map.put("msg", ResultEnum.ORRDER_CANCEL_SUCCESS.getMsg());
+        map.put("url", "/sell/seller/order/list");
+        return new ModelAndView("common/success", map);
+    }
+
+
+    @GetMapping("/detail")
+    public ModelAndView detail(@RequestParam("orderId") String orderId,
+                               Map<String, Object> map) {
+        OrderDTO orderDTO = new OrderDTO();
+        try{
+            orderDTO = orderService.findOne(orderId);
+        }catch (Exception e){
+            map.put("msg", e.getMessage());
+            map.put("url", "/sell/seller/order/list");
+            return new ModelAndView("common/error", map);
+        }
+        map.put("orderDTO", orderDTO);
+        return new ModelAndView("order/detail", map);
+    }
+
+    @GetMapping("/finish")
+    public ModelAndView finish(@RequestParam("orderId") String orderId,
+                               Map<String,Object> map) {
+        try{
+            OrderDTO orderDTO = orderService.findOne(orderId);
+            orderService.finish(orderDTO);
+        }catch (Exception e){
+            map.put("msg", e.getMessage());
+            map.put("url", "/sell/seller/order/list");
+            return new ModelAndView("common/error", map);
+        }
+        map.put("msg", ResultEnum.ORRDER_FINISH_SUCCESS.getMsg());
+        map.put("url", "/sell/seller/order/list");
+        return new ModelAndView("common/success", map);
     }
 }
