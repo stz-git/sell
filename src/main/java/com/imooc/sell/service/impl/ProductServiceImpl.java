@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    //扣库存在多线程并发的情况下可能会带来超卖的问题
+    //multiThread-->over_sale
     @Override
     @Transactional
     public void decreaseStock(List<CarDTO> carDTOList) {
@@ -67,5 +67,33 @@ public class ProductServiceImpl implements ProductService {
             productInfo.setProductStock(stock);
             save(productInfo);
         }
+    }
+
+    @Override
+    public ProductInfo onSale(String productId) {
+        ProductInfo productInfo = findOne(productId);
+        if(productInfo == null)
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+
+        //judge product's onsale status
+        if(productInfo.getProductStatus().equals(ProductStatusEnum.UP.getCode()))
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+
+        productInfo.setProductStatus(ProductStatusEnum.UP.getCode());
+        return repository.save(productInfo);
+    }
+
+    @Override
+    public ProductInfo offSale(String productId) {
+        ProductInfo productInfo = findOne(productId);
+        if(productInfo == null)
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+
+        //judge product's onsale status
+        if(productInfo.getProductStatus().equals(ProductStatusEnum.DOWN.getCode()))
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+
+        productInfo.setProductStatus(ProductStatusEnum.DOWN.getCode());
+        return repository.save(productInfo);
     }
 }

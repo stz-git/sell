@@ -16,7 +16,7 @@ public class OrderForm {
     private String address;
 
     @NotEmpty(message = "openid require")
-    private String openid;
+    private String openid = "oTgZpwT7Nk4CKiJFomiQ6NkEuoPU";
 
     @NotEmpty(message = "car empty")
     private String items;

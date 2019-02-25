@@ -35,7 +35,7 @@ public class PayServiceImpl implements PayService{
     @Override
     public PayResponse create(OrderDTO orderDTO) {
         PayRequest payRequest = new PayRequest();
-        payRequest.setOpenid(orderDTO.getBuyerOpenid());
+        payRequest.setOpenid("oTgZpwT7Nk4CKiJFomiQ6NkEuoPU");
         payRequest.setOrderAmount(orderDTO.getOrderAmount().doubleValue());
         payRequest.setOrderId(orderDTO.getOrderId());
         payRequest.setOrderName(ORDER_NAME);

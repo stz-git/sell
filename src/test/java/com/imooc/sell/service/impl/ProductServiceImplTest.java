@@ -2,6 +2,7 @@ package com.imooc.sell.service.impl;
 
 import com.imooc.sell.dataobject.ProductInfo;
 import com.imooc.sell.service.ProductService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,12 @@ public class ProductServiceImplTest {
         productInfo.setCategoryType(1);
         ProductInfo save = productService.save(productInfo);
         System.out.println(save);
+    }
+
+    @Test
+    public void onSaleTest(){
+        ProductInfo productInfo = productService.onSale("1");
+        System.out.println(productInfo);
+        Assert.assertNotNull(productInfo);
     }
 }
