@@ -12,6 +12,7 @@ spring:
 
 server:
   context-path: /sell
+  port: 8080
 
 wechat:
   mpAppId: wxd898fcb01713c658
