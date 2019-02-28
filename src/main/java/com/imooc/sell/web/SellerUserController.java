@@ -30,7 +30,7 @@ public class SellerUserController {
     private SellerService sellerService;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
     private ProjectUrlConfig projectUrlConfig;
@@ -52,7 +52,7 @@ public class SellerUserController {
         //2.save token in redis
         String token = UUID.randomUUID().toString();
         int expire = RedisConstant.EXPIRE;
-        redisTemplate.opsForValue().set(String.format(RedisConstant.TOKEN_PREFIX, token), openid, expire, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(String.format(RedisConstant.TOKEN_PREFIX, token), openid, expire, TimeUnit.SECONDS);
 
         //3.save token in cookie
         CookieUtil.set(response, CookieConstant.TOKEN, token, expire);//2 hours
@@ -68,7 +68,7 @@ public class SellerUserController {
         Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
         if (cookie != null) {
             //1.delete redis
-            redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+            stringRedisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
 
             //2.delete cookie
             CookieUtil.set(response, CookieConstant.TOKEN, null, 0);

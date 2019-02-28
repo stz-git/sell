@@ -25,6 +25,7 @@ public class OrderForm2OrderDTOConverter {
 
         List<OrderDetail> orderDetailList = new ArrayList<>();
         try {
+            //###### *****  #######
             orderDetailList = gson.fromJson(orderForm.getItems(),
                     new TypeToken<List<OrderDetail>>(){}
                     .getType());

@@ -15,6 +15,7 @@ import com.imooc.sell.repository.OrderMasterRepository;
 import com.imooc.sell.service.OrderService;
 import com.imooc.sell.service.PayService;
 import com.imooc.sell.service.ProductService;
+import com.imooc.sell.service.PushMessageService;
 import com.imooc.sell.util.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -48,19 +49,24 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PayService payService;
 
+    @Autowired
+    private PushMessageService pushMessageService;
+
     @Override
     @Transactional
     public OrderDTO create(OrderDTO orderDTO) {
 
         String orderId = KeyUtil.genUniqueKey();
         BigDecimal orderAmount = new BigDecimal(BigInteger.ZERO);
-        //1.查询商品
+
+        //1.get product
         List<OrderDetail> orderDetailList = orderDTO.getOrderDetailList();
         for (OrderDetail orderDetail : orderDetailList) {
             ProductInfo productInfo = productService.findOne(orderDetail.getProductId());
             if (productInfo == null)
                 throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
-            //2.计算总价
+
+            //2.orderAmount
             orderAmount = productInfo.getProductPrice().multiply(new BigDecimal(orderDetail.getProductQuantity())).add(orderAmount);
 
             BeanUtils.copyProperties(productInfo, orderDetail);
@@ -69,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
             orderDetailRepository.save(orderDetail);
         }
 
-        //3.写入数据库
+        //3.in db
         orderDTO.setOrderId(orderId);
         orderDTO.setOrderAmount(orderAmount);
         orderDTO.setOrderStatus(OrderStatusEnum.NEW.getCode());
@@ -78,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
         BeanUtils.copyProperties(orderDTO, orderMaster);
         orderMasterRepository.save(orderMaster);
 
-        //4.扣库存
+        //4.decreaseStock
         List<CarDTO> carDTOList = orderDetailList.stream()
                 .map(e -> new CarDTO(e.getProductId(), e.getProductQuantity()))
                 .collect(Collectors.toList());
@@ -137,11 +143,13 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
         productService.increaseStock(carDTOList);
 
-        //4.refund
+        //4.refund(money)
         if(orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())){
             payService.refoud(orderDTO);
         }
 
+        //5.send message
+        pushMessageService.orderStatus(orderDTO);
         return orderDTO;
     }
 
@@ -161,6 +169,9 @@ public class OrderServiceImpl implements OrderService {
         if (updateResult == null) {
             throw new SellException(ResultEnum.ORDER_UPDATE_FAIL);
         }
+
+        //send message(MQ)
+        pushMessageService.orderStatus(orderDTO);
         return orderDTO;
     }
 
