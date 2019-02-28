@@ -7,8 +7,12 @@ spring:
   jpa:
     show-sql: true
 #    database-platform: org.hibernate.dialect.MySQLDialect
+#  return non_null
   jackson:
     default-property-inclusion: non_null
+  redis:
+    host: 192.168.13.253
+    port: 6379
 
 server:
   context-path: /sell
@@ -22,5 +26,11 @@ wechat:
   mchKey: C5245D70627C1F8E9964D494B0735025
   keyPath: E:\h5.p12
   notifyUrl: http://cookie.natapp1.cc/sell/pay/notify
-  getOpenid:
-    redirectUrl: http://cookie.natapp1.cc/sell/wechat/userInfo
+  openAppId: wx6ad144e54af67d87
+  openAppSecret: 91a2ff6d38a2bbccfb7e9f9079108e2e
+
+project_url:
+  wechatMpAuthorize: http://cookie.natapp1.cc/sell/wechat/userInfo
+  wechatOpenAuthorize: http://cookie.natapp1.cc/sell/wechat/qrUserInfo
+  login: http://cookie.natapp1.cc/sell/seller/login
+  sell: http://cookie.natapp1.cc
