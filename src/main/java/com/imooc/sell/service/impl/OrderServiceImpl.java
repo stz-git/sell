@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
         String orderId = KeyUtil.genUniqueKey();
         BigDecimal orderAmount = new BigDecimal(BigInteger.ZERO);
 
-        //1.get product
+        //1.
         List<OrderDetail> orderDetailList = orderDTO.getOrderDetailList();
         for (OrderDetail orderDetail : orderDetailList) {
             ProductInfo productInfo = productService.findOne(orderDetail.getProductId());
@@ -69,13 +69,14 @@ public class OrderServiceImpl implements OrderService {
             //2.orderAmount
             orderAmount = productInfo.getProductPrice().multiply(new BigDecimal(orderDetail.getProductQuantity())).add(orderAmount);
 
+            //save orderDetail
             BeanUtils.copyProperties(productInfo, orderDetail);
             orderDetail.setDetailId(KeyUtil.genUniqueKey());
             orderDetail.setOrderId(orderId);
             orderDetailRepository.save(orderDetail);
         }
 
-        //3.save order in db
+        //3.save orderMaster
         orderDTO.setOrderId(orderId);
         orderDTO.setOrderAmount(orderAmount);
         orderDTO.setOrderStatus(OrderStatusEnum.NEW.getCode());

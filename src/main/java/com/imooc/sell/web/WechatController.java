@@ -53,7 +53,7 @@ public class WechatController {
 
     @GetMapping("/qrAuthorize")
     public String qrAuthorize(){
-//        String result = wxOpenService.buildQrConnectUrl(qr_redirect_url, WxConsts.QRCONNECT_SCOPE_SNSAPI_LOGIN, URLEncoder.encode(returnUrl));
+//        String result = wxOpenService.buildQrConnectUrl(projectUrlConfig.wechatOpenAuthorize, WxConsts.QRCONNECT_SCOPE_SNSAPI_LOGIN, URLEncoder.encode(returnUrl));
 
         String myOpenid = "oTgZpwT7Nk4CKiJFomiQ6NkEuoPU";
         String myRedirectUrl = URLEncoder.encode(projectUrlConfig.wechatOpenAuthorize);

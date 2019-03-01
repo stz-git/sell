@@ -44,10 +44,10 @@ project_url:
   wechatOpenAuthorize: http://cookie.natapp1.cc/sell/wechat/qrUserInfo
   login: http://cookie.natapp1.cc/sell/seller/login
   sell: http://cookie.natapp1.cc
-
-logging:
-  level:
-    com.imooc.sell.repository.mapper:  trace
+#
+#logging:
+#  level:
+#    com.imooc.sell.repository.mapper:  trace
 
 ######### mybatis ########
 mybatis:

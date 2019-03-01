@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BuyerServiceImpl implements BuyerService{
+public class BuyerServiceImpl implements BuyerService {
 
     @Autowired
     private OrderService orderService;
