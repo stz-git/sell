@@ -12,10 +12,7 @@ import com.imooc.sell.enums.ResultEnum;
 import com.imooc.sell.exception.SellException;
 import com.imooc.sell.repository.OrderDetailRepository;
 import com.imooc.sell.repository.OrderMasterRepository;
-import com.imooc.sell.service.OrderService;
-import com.imooc.sell.service.PayService;
-import com.imooc.sell.service.ProductService;
-import com.imooc.sell.service.PushMessageService;
+import com.imooc.sell.service.*;
 import com.imooc.sell.util.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -52,6 +49,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PushMessageService pushMessageService;
 
+    @Autowired
+    private WebSocket webSocket;
+
     @Override
     @Transactional
     public OrderDTO create(OrderDTO orderDTO) {
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
             orderDetailRepository.save(orderDetail);
         }
 
-        //3.in db
+        //3.save order in db
         orderDTO.setOrderId(orderId);
         orderDTO.setOrderAmount(orderAmount);
         orderDTO.setOrderStatus(OrderStatusEnum.NEW.getCode());
@@ -89,6 +89,9 @@ public class OrderServiceImpl implements OrderService {
                 .map(e -> new CarDTO(e.getProductId(), e.getProductQuantity()))
                 .collect(Collectors.toList());
         productService.decreaseStock(carDTOList);
+
+        //5.send message to webSocket  (replace by MQ)
+        webSocket.sendMessage(orderDTO.getOrderId());
         return orderDTO;
     }
 

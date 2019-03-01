@@ -36,7 +36,6 @@ public class OrderServiceImplTest {
         orderDTO.setOrderDetailList(Arrays.asList(orderDetail));
 
         OrderDTO save = orderService.create(orderDTO);
-        Assert.assertNotNull(save);
     }
 
     @Test
