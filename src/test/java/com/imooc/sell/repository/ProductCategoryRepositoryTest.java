@@ -34,4 +34,10 @@ public class ProductCategoryRepositoryTest {
         List<ProductCategory> productCategoryList = repository.findByCategoryTypeIn(categoryTypeList);
         System.out.println(productCategoryList);
     }
+
+    @Test
+    public void findTest(){
+        List<ProductCategory> productCategory = repository.findByCategoryName("火力全开榜");
+        System.out.println(productCategory);
+    }
 }
