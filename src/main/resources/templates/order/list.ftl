@@ -109,7 +109,7 @@
     /* webSocket listen HOUDUAN's webSocket */
     var webSocket = null;
     if('webSocket' in window){
-        webSocket = new WebSocket('ws://cookie.natapp1.cc/sell/webSocket');
+        webSocket = new WebSocket('ws://sell.com/sell/webSocket');
     }else{
         alert('No power to build webSocket');
     }

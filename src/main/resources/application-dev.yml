@@ -1,0 +1,55 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.13.253:3306/sell?characterEncoding=UTF-8&userSSL=false
+    username: root
+    password: 123456
+  jpa:
+    show-sql: true
+
+
+  jackson:
+    default-property-inclusion: non_null
+
+  redis:
+    host: 192.168.13.253
+    port: 6379
+
+server:
+  context-path: /sell
+  port: 8888
+
+wechat:
+  ######### pay ############
+  mpAppId: wxd898fcb01713c658
+  mchId: 1483469312
+  mchKey: C5245D70627C1F8E9964D494B0735025
+  keyPath: E:\h5.p12
+  notifyUrl: http://cookie.natapp1.cc/sell/pay/notify
+
+  ############ openid #############
+  myAppId: wxf14bf9b7d6a0f4d0
+  myAppSecret: c9fa4d34f8d7a54f7575e5926ae590d1
+
+  ###### qr openid ######
+  openAppId: wx6ad144e54af67d87
+  openAppSecret: 91a2ff6d38a2bbccfb7e9f9079108e2e
+
+  ######### send message ##########
+  templateId:
+    orderStatus: 3e1jtDevpY2iVV-I5ZPz0FRTK-wnLxMaxXLiCTn2fUs
+  sendToUser: ocN1X0lGdg4BUJAZgDmr9UJ7WTLA
+
+project_url:
+  wechatMpAuthorize: http://cookie.natapp1.cc/sell/wechat/userInfo
+  wechatOpenAuthorize: http://cookie.natapp1.cc/sell/wechat/qrUserInfo
+  login: http://cookie.natapp1.cc/sell/seller/login
+  sell: http://cookie.natapp1.cc
+#
+#logging:
+#  level:
+#    com.imooc.sell.repository.mapper:  trace
+
+######### mybatis ########
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
