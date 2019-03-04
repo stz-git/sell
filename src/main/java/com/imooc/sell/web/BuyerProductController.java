@@ -10,6 +10,7 @@ import com.imooc.sell.vo.ProductVO;
 import com.imooc.sell.vo.ResultVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,10 @@ public class BuyerProductController {
     private ProductService productService;
 
     @GetMapping("/list")
+    @Cacheable(cacheNames = "product", key = "123", condition = "", unless = "#result != 0")
     public ResultVO list(){
+
+        int result = 1;
 
         //1.get up product
         List<ProductInfo> productInfoList = productService.findUpAll();
